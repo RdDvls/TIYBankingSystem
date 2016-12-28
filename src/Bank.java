@@ -12,7 +12,7 @@ import java.util.Scanner;
 public class Bank {
     private String bankName = "First Bank Of Sampson";
     ArrayList <Customer> accountHolders = new ArrayList<Customer>();
-    Scanner inputScanner = new Scanner(System.in);
+    private Scanner inputScanner = new Scanner(System.in);
 
     public String getBankName() {
         return bankName;
@@ -93,24 +93,29 @@ public class Bank {
     public void printInfo() {
         int counter = 1;
         System.out.println(getBankName());
-        for (Customer customer : accountHolders){
+        for (Customer customer : accountHolders) {
             System.out.println(customer.getUserName());
-        }
-
-        for (Customer myCustomer : accountHolders) {
-            for (HashMap.Entry<String, BankAccount> currAcct : myCustomer.customerAccounts.entrySet()) {
+            for(HashMap.Entry<String,BankAccount> currAcct : customer.customerAccounts.entrySet()){
                 System.out.println(counter++ + " - " + currAcct.getKey() + " : " + currAcct.getValue().getAccountBalance());
+
             }
         }
-
+//        for (Customer myCustomer : accountHolders) {
+//            for (HashMap.Entry<String, BankAccount> currAcct : myCustomer.customerAccounts.entrySet()) {
+//                System.out.println(counter++ + " - " + currAcct.getKey() + " : " + currAcct.getValue().getAccountBalance());
+//            }
+//        }
     }
+
+
+
 
     public void writeBank (Bank myBank){
         FileWriter bankWriter = null;
         FileWriter customerWriter = null;
         try{
             File bankFile = new File("bank.txt");
-            File accountFile = new File("customer-name-accounts.txt");
+            File customerListFile = new File("customer-name-accounts.txt");
             bankWriter = new FileWriter(bankFile);
             for(Customer myCustomers : accountHolders){
                 bankWriter.write(myCustomers.getUserName() + ",");
@@ -125,15 +130,15 @@ public class Bank {
         }catch (Exception ex){
             System.out.println("Bank Error");
             ex.printStackTrace();
-        }finally {
-            if(bankWriter != null){
-                try{
-                    bankWriter.close();
-                }catch (Exception ex){
-                    System.out.println("Bank Error");
-                    ex.printStackTrace();
-                }
-            }
+//        }finally {
+//            if(bankWriter != null){
+//                try{
+//                    bankWriter.close();
+//                }catch (Exception ex){
+//                    System.out.println("Bank Error");
+//                    ex.printStackTrace();
+//                }
+//            }
         }
     }
 
@@ -154,7 +159,7 @@ public class Bank {
                     while (accountScanner.hasNext()){
                         String accountName = accountScanner.nextLine().split("=")[1];
                         double balance = Double.valueOf(accountScanner.nextLine().split("=")[1]);
-                        int type = Integer.valueOf(accountScanner.nextLine().split("=")[1]);
+                        int type = Integer.valueOf(accountScanner.nextLine().split( "= ")[1]);
                         if(type == 1){
                             BankAccount myAccount = new Checking(accountName,balance,type);
                             customerAccounts.put(accountName, myAccount);
